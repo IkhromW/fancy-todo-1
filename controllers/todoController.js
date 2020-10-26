@@ -13,10 +13,19 @@ class todoController {
       due_date
     }
     try {
+      
       const todo = await Todo.create(obj) 
       await res.status(201).json(todo)
     } catch (error) {
-      res.status(500).send(error)
+
+      if(error.name === 'SequelizeValidationError'){
+        res.status(400).json({
+         "message" : "please input properly"
+        })
+      } else {
+
+        res.status(500).send(error)
+      }
     } 
   }
 
@@ -38,8 +47,15 @@ class todoController {
      const id =  +req.params.id
     
      const todo = await Todo.findByPk(id)
-     
-     res.status(200).json(todo)
+     if(!todo){
+        res.status(404).json({
+          "message" : "data not found"
+        })
+
+     }else {
+
+       res.status(200).json(todo)
+     }
      
    } catch (error) {
      res.status(500).send(error)
@@ -65,9 +81,32 @@ class todoController {
         },
         returning: true
       })
-      res.status(200).json(todo[1][0])
+      if(todo[0] === 0){
+        res.status(404).json({
+          "message" : "data not found"
+        })
+      } else {
+        res.status(200).json(todo[1][0])
+      }
+     
     } catch (error) {
-      res.status(500).send(error)
+
+        if(error.name === 'SequelizeValidationError'){
+            res.status(400).json({
+             "message" : "please input properly"
+            })
+        } else {
+
+          if(error.name === 'SequelizeValidationError'){
+            res.status(400).json({
+             "message" : "please input properly"
+            })
+          } else {
+
+            res.status(500).send(error)
+          }
+          
+        }
     }
   }
 
@@ -85,9 +124,23 @@ class todoController {
         },
         returning : true
       })
-      res.status(200).json(todo[1][0])
+      if(todo[0] === 0){
+        res.status(404).json({
+          "message" : "data not found"
+        })
+      } else {
+        res.status(200).json(todo[1][0])
+      }
     } catch (error) {
-      res.status(500).send(error)
+
+        if(error.name === 'SequelizeValidationError'){
+          res.status(400).json({
+            "message" : "please input properly"
+          })
+        } else {
+
+          res.status(500).send(error)
+        }
     }
   }
   static async deleteById(req, res){
