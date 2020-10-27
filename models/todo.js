@@ -11,6 +11,9 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      Todo.belongsTo(models.User,{
+        foreignKey: 'UserId'
+      })
     }
   };
   Todo.init({
@@ -19,20 +22,13 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       validate: {
         notEmpty : {
+          args: true,
           msg: 'title is required'
         }
       }
     },
     description: DataTypes.STRING,
-    status: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      validate: {
-        notEmpty: {
-          msg: "status is required"
-        }
-      }
-    },
+    status: DataTypes.STRING ,
     due_date:{ 
       type : DataTypes.DATE,
       allowNull: false,
@@ -42,15 +38,18 @@ module.exports = (sequelize, DataTypes) => {
           msg : 'date is invalid, must input tommorrow date'
         }
       }
-    }
+    },
+    UserId: DataTypes.INTEGER
   }, {
     hooks: {
-      beforeCreate: (instance) => {
+      beforeCreate: (instance, options) => {
+        
         instance.status = 'unfinished'
       }
     },
     sequelize,
     modelName: 'Todo',
   });
+
   return Todo;
 };

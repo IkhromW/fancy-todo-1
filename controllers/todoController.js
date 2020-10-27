@@ -1,29 +1,30 @@
 const { Todo } = require('../models')
 
-class todoController {
+class TodoController {
 
   static async addNewTodo(req, res){
 
-    const { title, description, status, due_date } = req.body
+    const { title, description, due_date } = req.body
+    const UserId = req.loggedInUser.id
     
     const obj = {
       title,
       description,
-      status,
-      due_date
+      due_date,
+      UserId
     }
     try {
-      
-      const todo = await Todo.create(obj) 
-      await res.status(201).json(todo)
-    } catch (error) {
 
+      const todo = await Todo.create(obj) 
+      res.status(201).json(todo)
+    } catch (error) {
+      
       if(error.name === 'SequelizeValidationError'){
+
         res.status(400).json({
          "message" : "please input properly"
         })
-      } else {
-
+      } else { 
         res.status(500).send(error)
       }
     } 
@@ -159,4 +160,4 @@ class todoController {
     } 
   }
 }
-module.exports = todoController
+module.exports = TodoController

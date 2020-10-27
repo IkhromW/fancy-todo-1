@@ -3,26 +3,29 @@ const { comparePassword } = require('../helpers/bcrypt')
 const { generateToken } = require('../helpers/jwt')
 
 
-class userController {
+class UserController {
 
   static async register(req, res){
-
+    
+    const { email, password } = req.body
+   
+    
     try {
-
-      const { email, password } = req.body
+      //console.log(email);
+      
       const obj = {
         email,
         password
       }
-
+     
       const user = await User.create(obj)
-      res.status(201).json({
+      return res.status(201).json({
         id: user.id,
         email: user.email
       })
 
     } catch (error) {
-      
+      return res.status(500).json(error)
     }
 
   }
@@ -57,7 +60,7 @@ class userController {
           email: user.email
         })
         res.status(200).json({
-          "acces_token" : token
+          "access_token" : token
         })
       }
     } catch (error) {
@@ -66,4 +69,4 @@ class userController {
   }
 }
 
-module.exports = userController
+module.exports = UserController

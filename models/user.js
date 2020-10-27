@@ -12,6 +12,9 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      User.hasMany(models.Todo,{
+        foreignKey: 'UserId'
+      })
     }
   };
   User.init({
@@ -20,7 +23,7 @@ module.exports = (sequelize, DataTypes) => {
   }, {
     hooks: {
       beforeCreate: (instance) => {
-        instance.password = hashPassword(instance.password )
+        instance.password = hashPassword(instance.password)
       }
     },
     sequelize,
