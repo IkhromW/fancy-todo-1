@@ -5,13 +5,12 @@ const { generateToken } = require('../helpers/jwt')
 
 class UserController {
 
-  static async register(req, res){
+  static async register(req, res, next){
     
     const { email, password } = req.body
    
     
     try {
-      //console.log(email);
       
       const obj = {
         email,
@@ -25,11 +24,11 @@ class UserController {
       })
 
     } catch (error) {
-      return res.status(500).json(error)
+      return next(error)
     }
 
   }
-  static async login(req, res){
+  static async login(req, res, next){
 
     try {
       const { email, password } = req.body
@@ -42,16 +41,12 @@ class UserController {
           email: payload.email
         }
       })
-     
+      
       if(!user){
-        res.status(401).json({
-          "message" : "Invalid email or password"
-        })
+        throw {name: 'LoginFailed', msg: "Invalid email or password", status: 401 }
       }
       else if(!comparePassword(payload.password,user.password)){
-        res.status(401).json({
-          "message" : "Invalid email or password"
-        })
+        throw {name: 'LoginFailed', msg: "Invalid email or password", status: 401 }
       }
       else {
         
@@ -59,12 +54,12 @@ class UserController {
           id: user.id,
           email: user.email
         })
-        res.status(200).json({
+        return res.status(200).json({
           "access_token" : token
         })
       }
     } catch (error) {
-      res.status(500).send(error)
+      return next(error)
     }
   }
 }

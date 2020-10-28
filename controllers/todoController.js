@@ -2,7 +2,7 @@ const { Todo } = require('../models')
 
 class TodoController {
 
-  static async addNewTodo(req, res){
+  static async addNewTodo(req, res, next){
 
     const { title, description, due_date } = req.body
     const UserId = req.loggedInUser.id
@@ -18,53 +18,42 @@ class TodoController {
       const todo = await Todo.create(obj) 
       res.status(201).json(todo)
     } catch (error) {
-      
-      if(error.name === 'SequelizeValidationError'){
-
-        res.status(400).json({
-         "message" : "please input properly"
-        })
-      } else { 
-        res.status(500).send(error)
-      }
+      next(error)
     } 
   }
 
-  static async showAllTodo(req, res){
+  static async showAllTodo(req, res, next){
 
     try {
       const todos = await Todo.findAll({
         order: [['id']]
       })
-       res.status(200).json(todos)
+       return res.status(200).json(todos)
     } catch (error) {
-      res.status(500).send(error)
+       return next(error)
     }
   }
 
-  static async showTodoById(req, res){
+  static async showTodoById(req, res, next){
    
     try {
      const id =  +req.params.id
     
      const todo = await Todo.findByPk(id)
      if(!todo){
-        res.status(404).json({
-          "message" : "data not found"
-        })
-
+       throw { name: 'DataNotFound', msg: 'data not found', status: 404}
      }else {
 
-       res.status(200).json(todo)
+      return res.status(200).json(todo)
      }
      
    } catch (error) {
-     res.status(500).send(error)
+      return next(error)
    }
 
   }
 
-  static async updateTodo(req, res){
+  static async updateTodo(req, res, next){
 
     try {
       const id = +req.params.id
@@ -83,35 +72,17 @@ class TodoController {
         returning: true
       })
       if(todo[0] === 0){
-        res.status(404).json({
-          "message" : "data not found"
-        })
+        throw { name: 'DataNotFound', msg: 'data not found', status: 404}
       } else {
-        res.status(200).json(todo[1][0])
+        return res.status(200).json(todo[1][0])
       }
-     
     } catch (error) {
 
-        if(error.name === 'SequelizeValidationError'){
-            res.status(400).json({
-             "message" : "please input properly"
-            })
-        } else {
-
-          if(error.name === 'SequelizeValidationError'){
-            res.status(400).json({
-             "message" : "please input properly"
-            })
-          } else {
-
-            res.status(500).send(error)
-          }
-          
-        }
+        return next(error)
     }
   }
 
-  static async updateStatus(req, res){
+  static async updateStatus(req, res, next){
 
     try {
       const id = +req.params.id
@@ -126,25 +97,20 @@ class TodoController {
         returning : true
       })
       if(todo[0] === 0){
-        res.status(404).json({
-          "message" : "data not found"
-        })
-      } else {
-        res.status(200).json(todo[1][0])
+        throw { name: 'DataNotFound', msg: 'data not found', status: 404}
+      }
+      else if(!status || status === ''){
+        throw { name: 'StatusError', msg: 'status not updated yet', status: 400}
+      }
+      else {
+         return res.status(200).json(todo[1][0])
       }
     } catch (error) {
 
-        if(error.name === 'SequelizeValidationError'){
-          res.status(400).json({
-            "message" : "please input properly"
-          })
-        } else {
-
-          res.status(500).send(error)
-        }
+       return next(error)
     }
   }
-  static async deleteById(req, res){
+  static async deleteById(req, res, next){
     try {
       const id = +req.params.id
       const deleteTodo = await Todo.destroy({
@@ -152,11 +118,16 @@ class TodoController {
           id: id
         }
       })
-      res.status(200).json({
-        "message" : "data succesfully delete"
-      })
+      if(!deleteTodo){
+        throw { name: 'DataNotFound', msg: 'data not found', status: 404}
+      } else {
+       return res.status(200).json({
+          "message" : "data succesfully delete"
+        })
+      }
+      
     } catch (error) {
-      res.status(500).send(error)
+      return next(error)
     } 
   }
 }
