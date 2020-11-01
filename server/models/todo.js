@@ -15,6 +15,18 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: 'UserId'
       })
     }
+    formatDate(){
+      let dateNow = this.due_date
+      let date = dateNow.getDate()
+      let indexMonth = dateNow.getMonth()
+      let year = dateNow.toISOString().split('T')[0].split('-')[0]
+      let month = ['Jan','Feb', 'March', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct','Nov', 'Dec']
+      
+      let result = `${month[indexMonth]} ${date} ${year}`
+
+      return result
+
+    }
   };
   Todo.init({
     title: {

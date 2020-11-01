@@ -1,4 +1,4 @@
-const { Todo } = require('../models')
+const { Todo, User } = require('../models')
 
 class TodoController {
 
@@ -13,6 +13,8 @@ class TodoController {
       due_date,
       UserId
     }
+    
+    
     try {
 
       const todo = await Todo.create(obj) 
@@ -23,12 +25,29 @@ class TodoController {
   }
 
   static async showAllTodo(req, res, next){
-
+  
     try {
-      const todos = await Todo.findAll({
-        order: [['id']]
+      const data = await Todo.findAll({
+        include: [{model: User, attributes: ['email']}],
+        order: [['due_date','ASC']]
       })
-       return res.status(200).json(todos)
+     
+      let todos = data.map(el => {
+        
+        let obj ={
+          id: el.id,
+          UserId: el.UserId,
+          title: el.title,
+          description: el.description,
+          due_date: el.formatDate(),
+          status: el.status,
+          email: el.User.email
+        }
+        return obj
+      })
+      
+      
+       return res.status(200).json({ todos })
     } catch (error) {
        return next(error)
     }
@@ -36,15 +55,23 @@ class TodoController {
 
   static async showTodoById(req, res, next){
    
+    const id =  +req.params.id
+    const email = req.loggedInUser.email
     try {
-     const id =  +req.params.id
     
      const todo = await Todo.findByPk(id)
      if(!todo){
        throw { name: 'DataNotFound', msg: 'data not found', status: 404}
      }else {
-
-      return res.status(200).json(todo)
+      const obj = {
+        id: todo.id,
+        title: todo.title,
+        description: todo.description,
+        status: todo.status,
+        due_date: todo.formatDate(), 
+        email: email
+      }
+      return res.status(200).json({todo : obj})
      }
      
    } catch (error) {
