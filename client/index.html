@@ -9,7 +9,7 @@
         integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" 
         crossorigin="anonymous">
   <link rel="stylesheet" href="./main.css" />
- 
+  <meta name="google-signin-client_id" content="893562878002-5g9hg8d6s2ejsj2ggvji511univq3r8g.apps.googleusercontent.com">
   <link rel="shortcut icon" href="./img/icons8-todo-list-100.png"/>
   <title>TodoApp</title>
 </head>
@@ -28,7 +28,9 @@
                 <div class="col-4 col box-2 shadow-sm p-3 mb-5 bg-white rounded">
                   <div>
                     <p class="login mt-4"> SIGN IN</p>
-                  <div class="facebook-google mt-4"></div>
+                  <div class="facebook-google mt-4">
+                      <div class="g-signin2" data-onsuccess="onSignIn"></div>
+                  </div>
                   <div class="facebook-google mt-3"></div>
                   <div class="or"></div>
                   <p class="mt-5 hr"><span>or</span></p>
@@ -77,23 +79,24 @@
               </div> 
       </div>
   </section>
+
   <!-- Home -->
- 
+ <div id="home">
   <header>
       <nav class="navbar navbar-expand-lg">
           <a class="navbar-brand white" href="#">TODO</a>
           <div class="wrapper-btn-logout">
-            <button class="btn btn-primary btn-logout"> LOG OUT</button>
+            <button class="btn btn-primary btn-logout" onclick="logOut()"> LOG OUT</button>
           </div>
         </nav>
   </header>
   <div class="container-utama mt-3">
       <div style="text-align: center" >
-          <div id="home-left">
-             kiri
+          <div class="home-left">
+            
           </div>
           
-          <div id="home-center">
+          <div class="home-center">
               <form id="todo-form">
                   <div class="todo-content">
                       <input type="text" id="add-todo" placeholder="Whats your plan" class="form-control"/>
@@ -114,17 +117,19 @@
              
             </div>
             <div id="todo-detail"></div>
+            <div id="editPage"> </div>
           </div>
-          <div id="home-right">
-             kanan 
+          <div class="home-right">
+             
           </div> 
       </div> 
   </div>
-
+</div>
   
   
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script> 
   <script src='https://kit.fontawesome.com/a076d05399.js'></script>
+  <script src="https://apis.google.com/js/platform.js" async defer></script>
   <script src="./index.js"></script>
 </body>
 </html>

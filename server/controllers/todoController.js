@@ -68,7 +68,8 @@ class TodoController {
         title: todo.title,
         description: todo.description,
         status: todo.status,
-        due_date: todo.formatDate(), 
+        due_date: todo.formatDate(),
+        display_date: todo.formatDateString(),
         email: email
       }
       return res.status(200).json({todo : obj})

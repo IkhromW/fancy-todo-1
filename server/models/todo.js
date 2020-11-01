@@ -25,7 +25,9 @@ module.exports = (sequelize, DataTypes) => {
       let result = `${month[indexMonth]} ${date} ${year}`
 
       return result
-
+    }
+    formatDateString(){
+      return this.due_date.toISOString().slice(0,10)
     }
   };
   Todo.init({

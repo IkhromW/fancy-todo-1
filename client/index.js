@@ -3,7 +3,7 @@ const SERVER = 'http://localhost:3000'
 $(document).ready(function () {
 
   const access_token = localStorage.getItem('access_token')
-  console.log(access_token);
+  
   
   if(access_token){
     $('#home').show()
@@ -59,6 +59,7 @@ function login (e) {
               console.log(access_token);
               localStorage.setItem('access_token', access_token)
               $('#login').hide()
+              $('#home').show()
               fetchTodo()
             })
             .catch(err => {
@@ -67,6 +68,26 @@ function login (e) {
               $('#password-login').val("") 
             })
  
+}
+
+function onSignIn(googleUser) {
+  const google_access_token =  googleUser.getAuthResponse().id_token;
+  console.log(google_access_token);
+  
+  return promiseAjax(SERVER + '/users/googleLogin', 'POST', null, { google_access_token })
+          .then(response => {
+            console.log(response);
+            const access_token = response.access_token
+            console.log(access_token);
+            localStorage.setItem('access_token', access_token)
+            $('#login').hide()
+            $('#home').show()
+            fetchTodo()
+          })
+          .catch(err => {
+            console.log(err);
+            
+          })
 }
 
 // REGISTER
@@ -103,7 +124,7 @@ function fetchTodo () {
             
             $('#todo').empty()
             response.todos.forEach(element => {
-            
+              
               $('#todo').append(`
              
               <div class="render-todo"> 
@@ -113,7 +134,7 @@ function fetchTodo () {
                   <h2 style="margin-left:2%;"><strong>${element.title}</strong></h2>
                   <p style="margin-left:2%;">${element.description}</p>
                   <div class="form-check">
-                  <input class="form-check-input ml-1" type="checkbox" value="" id="defaultCheck1">
+                  <input class="form-check-input ml-1" type="checkbox" (${element.status} === 'unfinished') ? '' :  checked id="defaultCheck1">
                   <label class="form-check-label ml-4 " for="defaultCheck1">
                     Done 
                   </label>
@@ -184,7 +205,7 @@ function detail (id){
                 <p style="margin-left:2%;">${response.todo.description}</p>
                 <div class="form-check">
                 <input class="form-check-input ml-1" type="checkbox" value="" id="defaultCheck1">
-                <label class="form-check-label ml-4 " for="defaultCheck1">
+                <label class="form-check-label ml-4" for="defaultCheck1">
                   Done 
                 </label>
               </div>
@@ -192,8 +213,8 @@ function detail (id){
               <div class="todo-date">
                 <h3 style="margin-top:20%;">${response.todo.due_date}</h3>
                 <div class="delete-edit mt-5">
-                  <i class="far fa-edit" style="font-size:24px;color:rgb(29,161,242)"></i>
-                  <i class="fas fa-trash-alt" style='font-size:24px;color:red'></i>
+                  <button class="btn-edit" onclick="edit(${response.todo.id})"><i class="far fa-edit"></i></button>
+                  <button class="btn-delete" onclick="deleteTodo(${response.todo.id})"><i class="fa fa-trash"></i> Delete</button>
                 </div>
               </div>
             </div>
@@ -205,6 +226,77 @@ function detail (id){
             console.log(err);  
           })
 }
+
+function deleteTodo (id) {
+  const access_token = localStorage.getItem('access_token')
+
+  return promiseAjax(SERVER + '/todos/' + id, 'DELETE', { access_token }, null)
+          .then(response => {
+            console.log(response);
+            alert('succesfull delete')
+           
+            fetchTodo()
+            $('#todo').show()
+            $('#todo-form').show()
+            $('#todo-detail').hide()
+          })
+          .catch(err => {
+            console.log(err);
+            
+          })
+}
+function edit(id) {
+
+  $('#todo').hide()
+  $('#todo-form').hide()
+  $('#todo-detail').hide()
+
+
+  const access_token = localStorage.getItem('access_token')
+
+  return promiseAjax(`${SERVER}/todos/${id}`, 'GET', { access_token }, null)
+  .then(response => {
+    $('#editPage').append(`
+    <form id="todo-form">
+    <div class="todo-content">
+        <input 
+          type="text" id="edit-todo" 
+          placeholder="Whats your plan" 
+          class="form-control" 
+          value='${response.todo.title}'/>
+        <textarea 
+          id="edit-description"
+          placeholder="Enter description..."
+          class="form-control mt-3"
+          ${response.todo.description}
+        >
+        ${response.todo.description}
+        </textarea>
+    </div>
+    <div  class="todo-date">
+        <input 
+          type="date" 
+          id="edit-date" 
+          class="form-control"
+          value='${response.todo.display_date}'
+          />
+        <button type="submit" class="btn btn-primary btn-color white  mt-4">Submit</button>
+    </div>
+    
+  </form>
+    `)
+  })
+
+  
+}
+function logOut(){
+    localStorage.removeItem('access_token')
+    $('#home').hide()
+    $('#login').show()
+    $('#register').hide()
+
+}
+
 
 
 
