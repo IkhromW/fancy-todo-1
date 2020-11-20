@@ -27,9 +27,9 @@
                 </div>
                 <div class="col-4 col box-2 shadow-sm p-3 mb-5 bg-white rounded">
                   <div>
-                    <p class="login mt-4"> SIGN IN</p>
+                    <p class="login mt-2"> SIGN IN</p>
                   <div class="facebook-google mt-4">
-                      <div class="g-signin2" data-onsuccess="onSignIn"></div>
+                      <div class="g-signin2" data-width="350" data-longtitle="true"  data-onsuccess="onSignIn"></div>
                   </div>
                   <div class="facebook-google mt-3"></div>
                   <div class="or"></div>
@@ -45,7 +45,7 @@
                   </form>
                   <p class="text mt-5"> Not a member yet?<a id="link" onclick="signUp()" > Sign Up </a>  </p>
                 </div>
-              </div> 
+               
       </div>
   </section>
   <!-- Register  -->
@@ -90,39 +90,43 @@
           </div>
         </nav>
   </header>
-  <div class="container-utama mt-3">
-      <div style="text-align: center" >
-          <div class="home-left">
-            
-          </div>
-          
-          <div class="home-center">
-              <form id="todo-form">
-                  <div class="todo-content">
-                      <input type="text" id="add-todo" placeholder="Whats your plan" class="form-control"/>
+  <div class="container-xl mt-5">
+    <div class="row">
+      <div class="col">
+        One of three columns
+      </div>
+      <div class="col-6">
+        <div class="rounded">
+            <form id="todo-form" class="mt-2">
+                <div class="todo-content">
+                    <input type="text" id="add-todo" placeholder="Whats your plan" class="form-control"/>
+                    <div class="mt-3"> 
                       <textarea 
                         id="add-description"
-                        placeholder="Enter description..."
-                        class="form-control mt-3"
-                      >
+                        rows="3"
+                        cols="44"
+                      > 
                       </textarea>
-                  </div>
-                  <div  class="todo-date">
-                      <input type="date" id="add-date" class="form-control"/>
-                      <button type="submit" class="btn btn-primary btn-color white  mt-4" onclick="postTodo(event)" >POST</button>
-                  </div>
-                  
-              </form>
-            <div id="todo">
-             
+                    </div>
+                </div>
+                <div class="todo-date">
+                    <input type="date" id="add-date" class="form-control"/>
+                    <button type="submit" class="btn btn-primary btn-color white ml-3" style="width: 50%; margin-top: 55px" onclick="postTodo(event)" >POST</button>
+                </div>
+            </form>
+            <div>
+                <div id="todo">
+           
+                </div>
+                <div id="todo-detail"></div>
+                <div id="editPage"> </div>
             </div>
-            <div id="todo-detail"></div>
-            <div id="editPage"> </div>
-          </div>
-          <div class="home-right">
-             
-          </div> 
-      </div> 
+        </div>
+      </div>
+      <div class="col">
+        One of three columns
+      </div>
+    </div>
   </div>
 </div>
   

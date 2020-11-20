@@ -85,11 +85,10 @@ class TodoController {
 
     try {
       const id = +req.params.id
-      const {title, description, status, due_date} = req.body
+      const {title, description, due_date} = req.body
       const obj = {
         title,
         description,
-        status,
         due_date
       }
 

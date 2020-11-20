@@ -65,8 +65,8 @@ class UserController {
   }
   static googleLogin(req, res, next) {
 
-    let { google_access_token }= req.body
-    console.log(google_access_token);
+    let { google_access_token } = req.body
+    //console.log(google_access_token);
     
     const client = new OAuth2Client(process.env.CLIENT_ID);
     let email
@@ -88,7 +88,13 @@ class UserController {
     .then(user => {
 
       if(user){
-        return user
+        const token = generateToken({
+          id: user.id,
+          email: user.email
+        })
+        res.status(200).json({
+          'access_token' : token
+        })
       }
       else{
         console.log('<<<');
@@ -101,8 +107,8 @@ class UserController {
     })
     .then(dataUser => {
       let access_token = generateToken({ 
-        id: user.id,
-        email: user.email
+        id: dataUser.id,
+        email: dataUser.email
       })
       res.status(200).json({access_token})
     })

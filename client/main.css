@@ -22,7 +22,12 @@ p span {
    background:#fff; 
    padding:0 10px; 
 }
-
+#add-todo {
+  width: 100%;
+}
+#add-date {
+  width: 60%
+}
 .btn-color{
   width: 100%;
   background-color: rgb(29,161,242)
@@ -89,44 +94,19 @@ p span {
   margin-left: 88%
 } 
 
-.container-utama{
-  
-  height: auto;
-  width: 100%
-}
-
-.home-left {
-  float: left; 
-  width: 25%;
-  
-}
-.home-center {
-  float: left; 
-  width: 50%;
-  height: 800px;
-  
-}
-.home-right {
-  float: left; 
-  width: 25%;
-  
-}
 .render-todo {
   width: 100%;
-  height: 180px;
+  height: 120px;
   border: 1px solid black;
   border-radius: 10px;
   text-align: left
 }
 .todo-content {
-  width: 70%; 
-  height: 150px;
-  float: left;
-  
+  width: 70%;  
+  float: left; 
 }
 .todo-date {
-  margin-left: 75%;
-  height: 150px;
+  margin-left: 50%;
   justify-content: center;
   vertical-align: middle;
   text-align: center
@@ -156,6 +136,9 @@ p span {
 
 .btn-edit:hover {
   background-color: RoyalBlue;
+}
+p {
+  margin: 0
 }
 
 

@@ -21,3 +21,40 @@
     </form>
     <p class="text mt-5"> Not a member yet?Sign Up</p>
   </div>
+
+  
+
+
+
+  <div class="container-utama mt-3">
+    <div style="text-align: center" >
+        <div class="home-left">
+          
+        </div>
+  
+        <div class="home-center">
+            <form id="todo-form">
+                <div class="todo-content">
+                    <input type="text" id="add-todo" placeholder="Whats your plan" class="form-control"/>
+                    <textarea 
+                      id="add-description"
+                    >
+                    </textarea>
+                </div>
+                <div  class="todo-date">
+                    <input type="date" id="add-date" class="form-control"/>
+                    <button type="submit" class="btn btn-primary btn-color white  mt-4" onclick="postTodo(event)" >POST</button>
+                </div>
+                
+            </form>
+          <div id="todo">
+           
+          </div>
+          <div id="todo-detail"></div>
+          <div id="editPage"> </div>
+        </div>
+        <div class="home-right">
+           
+        </div> 
+    </div> 
+</div>
